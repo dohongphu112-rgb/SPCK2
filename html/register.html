@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #0095ff, #00d1ff);
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        width: 350px;
+        padding: 40px 30px;
+        background: white;
+        border-radius: 25px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        margin-bottom: 25px;
+        color: #0044ff;
+        font-size: 32px;
+        font-weight: 700;
+      }
+
+      .input-box {
+        width: 100%;
+        margin-bottom: 18px;
+      }
+
+      .input-box input {
+        width: 100%;
+        padding: 12px;
+        font-size: 15px;
+        border: 2px solid black;
+        border-radius: 10px;
+        outline: none;
+      }
+
+      .btn {
+        margin-top: 10px;
+        width: 150px;
+        padding: 10px;
+        border-radius: 12px;
+        border: 2px solid black;
+        background: linear-gradient(135deg, #ffe2be, #ffdbb1);
+        cursor: pointer;
+        font-size: 16px;
+      }
+    </style>
+<div class="container">
+  <h2>Sign Up</h2>
+    <form action="">
+      <input type="text" id="fullname" placeholder="Fullname" />
+      <p class="user_fn"></p>
+
+      <input type="text" id="username" placeholder="Username" />
+      <p class="user_err"></p>
+
+      <input type="text" class="" id="password" placeholder="Password" />
+      <p class="user_pass"></p>
+
+      <input type="text" id="conf_password" placeholder="Confirm Password" />
+      <p class="user_cfpass"></p>
+
+      <button id="btn_reg" type="button" class="btn_reg">Đăng ký</button>
+    </form>
+
+    <!-- <script>
+      const dataUser = [
+        {
+          fullname: "Học sinh A",
+          username: "hsa",
+          password: "123",
+        },
+        {
+          fullname: "Học sinh D",
+          username: "hsd",
+          password: "123",
+        },
+        {
+          fullname: "Học sinh C",
+          username: "hsc",
+          password: "123",
+        },
+      ];
+
+      if (!localStorage.getItem("DATA_USER")) {
+        localStorage.setItem("DATA_USER", JSON.stringify(dataUser));
+      }
+
+      let dataLocalUser = JSON.parse(localStorage.getItem("DATA_USER"));
+
+      const valueBtn = document.querySelector(".btn_login");
+
+      function handleLogin() {
+        const valueUser = document.querySelector(".username").value;
+        const valuePass = document.querySelector(".password").value;
+        console.log(valueUser);
+
+        for (let i = 0; i < dataLocalUser.length; i++) {
+          if (
+            valueUser == dataLocalUser[i].username &&
+            valuePass == dataLocalUser[i].password
+          ) {
+            window.location.href = "index.html";
+          }
+          //   console.log(dataLocalUser[i].username);
+          //   console.log(dataLocalUser[i].password);
+        }
+      }
+
+      valueBtn.addEventListener("click", handleLogin);
+    </script> -->
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBRsYiJX-i97pt7gmg0t0fRrJiKPYmtn_s",
+        authDomain: "jsi36-a45bc.firebaseapp.com",
+        projectId: "jsi36-a45bc",
+        storageBucket: "jsi36-a45bc.firebasestorage.app",
+        messagingSenderId: "346562660239",
+        appId: "1:346562660239:web:18be6a1d29bd8d600dedfa",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      const getauth = getAuth(app);
+
+      const btn_reg = document.querySelector(".btn_reg");
+      console.log(btn_reg);
+      function handleReg() {
+        const valueUser = document.querySelector("#username").value;
+        const valuePass = document.querySelector("#password").value;
+        createUserWithEmailAndPassword(getauth, valueUser, valuePass)
+          .then((item) => {
+            console.log(item);
+            window.location.href = "index.html";
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      }
+      btn_reg.addEventListener("click", handleReg);
+    </script>
+    </div>
+  </body>
+</html>
