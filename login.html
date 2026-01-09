@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/style.css">
+  </head>
+  <body>
+<div class="container">
+<h2>Sign In</h2>
+    <form action="">
+      <input type="text" id="username" placeholder="Username" />
+      <p class="user_err"></p>
+
+      <input type="text" class="" id="password" placeholder="Password" />
+      <p class="user_pass"></p>
+      <button id="btn_reg" type="button" class="btn_reg">Đăng nhập</button>
+      <button type="button" class="btn_reg"><a href="./register.html">Đăng ký</a></button>
+    </form>
+  </div>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+  apiKey: "AIzaSyBRsYiJX-i97pt7gmg0t0fRrJiKPYmtn_s",
+  authDomain: "jsi36-a45bc.firebaseapp.com",
+  projectId: "jsi36-a45bc",
+  storageBucket: "jsi36-a45bc.firebasestorage.app",
+  messagingSenderId: "346562660239",
+  appId: "1:346562660239:web:18be6a1d29bd8d600dedfa"
+};
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      const getauth = getAuth(app);
+
+      const btn_reg = document.querySelector(".btn_reg");
+      console.log(btn_reg);
+      function handleReg() {
+        const valueUser = document.querySelector("#username").value;
+        const valuePass = document.querySelector("#password").value;
+        signInWithEmailAndPassword(getauth, valueUser, valuePass)
+          .then((item) => {
+            console.log(item);
+            window.location.href = "index.html";
+          })
+          .catch((err) => {
+            console.log(err.message);
+            alert("Email hoặc mật khẩu không trùng khớp!")
+          });
+      }
+      btn_reg.addEventListener("click", handleReg);
+    </script>
+  </body>
+</html>

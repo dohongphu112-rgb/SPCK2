@@ -1,123 +1,117 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fastpost</title>
-    <link rel="stylesheet" href="./assets/style2.css">
+    <title>San Pham Cuoi Khoa</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
+      crossorigin="anonymous"
+    />
 
+    <link rel="stylesheet" href="./style.css" />
+
+    
   </head>
   <body>
-    <!-- HEADER -->
-    <header class="header">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container">
-        <div class="logo">Fastpost</div>
-        <nav class="nav">
-          <ul>
-            <li><a href="./test.html">Đăng nhập</li>
-            <li><a href="#">Giới thiệu</a></li>
-            <li><a href="#">Tin tức</a></li>
-            <li><a href="#">Liên hệ</a></li>
+        <a class="navbar-brand" href="#"
+          ><i class="bi bi-bootstrap-fill"></i
+        ></a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="http://127.0.0.1:5501/Docs.html"
+                >Docs</a
+              >
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Examples</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Icons</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Themes</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="http://127.0.0.1:5501/home.html"
+                >Home</a
+              >
+            </li>
           </ul>
-        </nav>
-      </div>
-    </header>
-
-    <!-- HERO -->
-    <section class="hero">
-      <h1>ở đây có thông tin</h1>
-      <p>Nơi cập nhật tin tức và dịch vụ mới nhất</p>
-      <a href="./rickroll.html" class="btn">Xem thêm</a>
-    </section>
-
-    <!-- SECTION TIN TỨC -->
-    <section class="container">
-      <h2>Tin tức nổi bật</h2>
-      <div class="grid" id="idgrid"></div>
-    </section>
-
-        <div class="container">
-        <div class="row data_render">
-        <!-- <div class="col-4 border p-3">
-          <img src="image1.jpg" alt="" />
-          <h4>Product 1</h4>
-          <p>Description for product 1</p>
-          <a href="" class="btn btn-primary">Vào ngay</a>
-        </div> -->
+          <form class="d-flex">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+            />
+          </form>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="bi bi-github"></i> Github</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="bi bi-twitter-x"></i> Twitter</a
+              >
+            </li>
+          </ul>
         </div>
-    </div>
-
-    <!-- SECTION DỊCH VỤ -->
-    <section class="container">
-      <h2>Dịch vụ</h2>
-      <div class="grid">
-        <div class="card">Dịch vụ Air</div>
-        <div class="card">Dịch vụ nothing</div>
-        <div class="card">Dịch vụ không khí</div>
       </div>
-    </section>
+    </nav>
+    <img src="./img/bootstrap-logo-shadow@2x.png" class="mx-auto d-block" style="margin-top: 80px;" alt="">
+    <section class="container py-5">
+  <h2 class="fw-bold text-center mb-4">Get started any way you want</h2>
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-5">
+      <h5 class="fw-semibold">Install via npm</h5>
+      <pre class="bg-light p-3 rounded"><code>npm install bootstrap@5.3.7</code></pre>
+    </div>
+    <div class="col-md-5">
+      <h5 class="fw-semibold">Include via CDN</h5>
+      <pre class="bg-light p-3 rounded">
+<code>&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"&gt;</code>
+      </pre>
+    </div>
+  </div>
+</section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-      <p>© 2025 Fastpost. All rights reserved.</p>
+    <!-- Tính năng -->
+    <section class="bg-light py-5">
+      <div class="container">
+        <h2 class="text-center mb-5">Tính năng nổi bật</h2>
+        <div class="row text-center">
+          <div class="col-md-4">
+            <div class="p-4 border rounded">
+              <h4>
+                <a href=""
+                  ><a href="#"><i class="bi bi-bootstrap-fill"></i></a
+                ></a>
+              </h4>
+              <p>
+                Bootstrap Designed and built with all the love in the world by
+                the Bootstrap team with the help of our contributors. Code
+                licensed MIT, docs CC BY 3.0. Currently v5.3.6
+              </p>
+            </div>
+          </div>
+          
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+      <div class="container">
+        <p class="mb-0">&copy; 2025 Hongphu product. All rights reserved.</p>
+      </div>
     </footer>
 
-    <!-- BUTTON -->
-    <button id="toTop">↑</button>
-
-    <table>
-      <tbody>
-        <tr></tr>
-      </tbody>
-    </table>
-
-    <script type="module">
-      const eleDataRender = document.querySelector(".data_render");
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-      import { 
-        getFirestore,
-        getDocs,
-        collection
-
-      } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-      // TODO: Add SDKs for Firebase products that you want to use
-      // https://firebase.google.com/docs/web/setup#available-libraries
-
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyBRsYiJX-i97pt7gmg0t0fRrJiKPYmtn_s",
-        authDomain: "jsi36-a45bc.firebaseapp.com",
-        projectId: "jsi36-a45bc",
-        storageBucket: "jsi36-a45bc.firebasestorage.app",
-        messagingSenderId: "346562660239",
-        appId: "1:346562660239:web:18be6a1d29bd8d600dedfa",
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-
-      const db = getFirestore(app);
-
-       const querySnapshot = await getDocs(collection(db, "Post"));
-      querySnapshot.forEach((doc) => {
-        console.log(doc.data());
-
-        eleDataRender.innerHTML += `
-        <div class= "box">
-          <img src="${doc.data().img}" />
-          <h2>${doc.data().title}</h2>
-          <p>${doc.data().des}</p>
-        </div>
-        `
-      });
-    </script>
-
     <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
       crossorigin="anonymous"
     ></script>
-    </script>
   </body>
 </html>
