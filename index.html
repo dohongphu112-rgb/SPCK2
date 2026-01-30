@@ -1,21 +1,39 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Messenger Firestore</title>
-
   <link rel="stylesheet" href="./assets/style.css">
+
+  <style>
+    .profile-box{
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,.15);
+      z-index: 9999;
+      font-size: 14px;
+    }
+    .hidden{display:none;}
+  </style>
 </head>
 <body>
 
+<!-- MINI PROFILE -->
+<div class="profile-box hidden" id="profileBox">
+  <div><b id="miniName"></b></div>
+  <div id="miniEmail"></div>
+</div>
+
 <div class="app">
 
-  <!-- thanh ngang -->
   <div class="friends">
 
-    <div class="auth-links">
+    <div class="auth-links" id="authLinks">
       <a href="./login.html">Đăng nhập</a>
       <span>·</span>
       <a href="./register.html">Đăng ký</a>
@@ -26,40 +44,25 @@
     <div class="friend-list" id="friendList"></div>
   </div>
 
-  <!-- chat -->
   <div class="chat-app">
-
-    <div class="chat-header" id="chatHeader">
-      Chọn bạn để chat
-    </div>
-
+    <div class="chat-header" id="chatHeader">Chọn bạn để chat</div>
     <div class="chat-body" id="chatBody"></div>
 
     <div class="chat-input">
       <input id="msgInput" placeholder="Aa">
       <button id="sendBtn">➤</button>
     </div>
-
   </div>
+
 </div>
 
 <script type="module">
-
-import { initializeApp,
-        getAuth,
-        onAuthStateChanged
- } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 import {
-  getFirestore,
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  onSnapshot,
-  where,
-  serverTimestamp,
-  doc,
-  getDoc
+  getFirestore, collection, addDoc, query,
+  orderBy, onSnapshot, where, serverTimestamp,
+  doc, getDoc
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -73,6 +76,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 const friendList = document.getElementById("friendList");
 const chatBody = document.getElementById("chatBody");
@@ -80,9 +84,52 @@ const chatHeader = document.getElementById("chatHeader");
 const input = document.getElementById("msgInput");
 const sendBtn = document.getElementById("sendBtn");
 
-let currentFriend = null;
+const profileBox = document.getElementById("profileBox");
+const authLinks = document.getElementById("authLinks");
 
-/* LOAD FRIEND LIST */
+let currentFriend = null;
+let currentUser = null;
+
+/* ===== AUTH CHECK ===== */
+onAuthStateChanged(auth, async (user) => {
+
+  if (!user) {
+    alert("Bạn chưa đăng nhập. Vui lòng đăng nhập để sử dụng chat.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUser = user;
+
+  const choice = confirm(
+    "Bạn đã đăng nhập thành công.\n\nOK → Vào chat\nCancel → Đăng xuất"
+  );
+
+  if (!choice) {
+    await signOut(auth);
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Load profile
+  let fullName = "User";
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (snap.exists()) {
+      fullName = snap.data().fullName || "User";
+    }
+  } catch(e){}
+
+  document.getElementById("miniName").textContent = fullName;
+  document.getElementById("miniEmail").textContent = user.email;
+
+  profileBox.classList.remove("hidden");
+
+  // Ẩn nút đăng nhập / đăng ký
+  authLinks.style.display = "none";
+});
+
+/* ===== LOAD FRIEND LIST ===== */
 onSnapshot(collection(db, "friends"), (snap) => {
   friendList.innerHTML = "";
 
@@ -91,10 +138,7 @@ onSnapshot(collection(db, "friends"), (snap) => {
     const div = document.createElement("div");
 
     div.className = "friend";
-    div.innerHTML = `
-      <div class="avatar"></div>
-      <div>${f.name}</div>
-    `;
+    div.innerHTML = `<div class="avatar"></div><div>${f.name}</div>`;
 
     div.onclick = () => {
       currentFriend = docu.id;
@@ -106,9 +150,8 @@ onSnapshot(collection(db, "friends"), (snap) => {
   });
 });
 
-/* LOAD MESSAGE */
+/* ===== LOAD MESSAGES ===== */
 function loadMessages() {
-
   const q = query(
     collection(db, "messages"),
     where("friendId", "==", currentFriend),
@@ -122,7 +165,7 @@ function loadMessages() {
       const d = docu.data();
       const msg = document.createElement("div");
 
-      msg.className = "message " + (d.isMe ? "right" : "left");
+      msg.className = "message " + (d.senderId === currentUser.uid ? "right" : "left");
       msg.textContent = d.text;
 
       chatBody.appendChild(msg);
@@ -132,45 +175,22 @@ function loadMessages() {
   });
 }
 
-/* SEND MESSAGE */
-sendBtn.addEventListener("click", () => {
-
-  if (!currentFriend) return;
+/* ===== SEND MESSAGE ===== */
+sendBtn.addEventListener("click", async () => {
+  if (!currentFriend || !currentUser) return;
 
   const text = input.value.trim();
   if (!text) return;
 
-  addDoc(collection(db, "messages"), {
-    text: text,
+  await addDoc(collection(db, "messages"), {
+    text,
     friendId: currentFriend,
-    isMe: true,
+    senderId: currentUser.uid,
     createdAt: serverTimestamp()
   });
 
   input.value = "";
-  const auth = getAuth(app);
-
-const authBox = document.getElementById("authBox");
-const profileBox = document.getElementById("profileBox");
-
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    authBox.classList.remove("hidden");
-    profileBox.classList.add("hidden");
-    return;
-  }
-
-  const snap = await getDoc(doc(db, "users", user.uid));
-  const data = snap.data();
-
-  document.getElementById("miniName").textContent = data.name;
-  document.getElementById("miniUsername").textContent = "@" + data.username;
-
-  authBox.classList.add("hidden");
-  profileBox.classList.remove("hidden");
 });
-});
-
 </script>
 
 </body>

@@ -1,120 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="./assets/style2.css">
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="./assets/style2.css">
+</head>
+<body>
+
 <div class="container">
   <h2>Sign Up</h2>
-    <form action="">
-      <input type="text" id="fullname" placeholder="Fullname" />
-      <p class="user_fn"></p>
 
-      <input type="text" id="username" placeholder="Username" />
-      <p class="user_err"></p>
+  <form id="registerForm">
+    <input type="text" id="fullname" placeholder="Fullname" />
+    <p class="user_fn"></p>
 
-      <input type="text" class="" id="password" placeholder="Password" />
-      <p class="user_pass"></p>
+    <input type="email" id="email" placeholder="Email" />
+    <p class="user_err"></p>
 
-      <input type="text" id="conf_password" placeholder="Confirm Password" />
-      <p class="user_cfpass"></p>
+    <input type="password" id="password" placeholder="Password" />
+    <p class="user_pass"></p>
 
-      <button id="btn_reg" type="button" class="btn_reg">Đăng ký</button>
-      <button type="button" class="btn_reg"><a href="./login.html">Đăng nhập</a></button>
-    </form>
+    <input type="password" id="conf_password" placeholder="Confirm Password" />
+    <p class="user_cfpass"></p>
 
-    <!-- <script>
-      const dataUser = [
-        {
-          fullname: "Học sinh A",
-          username: "hsa",
-          password: "123",
-        },
-        {
-          fullname: "Học sinh D",
-          username: "hsd",
-          password: "123",
-        },
-        {
-          fullname: "Học sinh C",
-          username: "hsc",
-          password: "123",
-        },
-      ];
+    <p id="errorMessage" style="color:red;"></p>
 
-      if (!localStorage.getItem("DATA_USER")) {
-        localStorage.setItem("DATA_USER", JSON.stringify(dataUser));
-      }
+    <button type="submit" class="btn_reg">Đăng ký</button>
+    <button type="button" class="btn_reg">
+      <a href="./login.html">Đăng nhập</a>
+    </button>
+  </form>
+</div>
 
-      let dataLocalUser = JSON.parse(localStorage.getItem("DATA_USER"));
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-      const valueBtn = document.querySelector(".btn_login");
+  const firebaseConfig = {
+    apiKey: "AIzaSyBRsYiJX-i97pt7gmg0t0fRrJiKPYmtn_s",
+    authDomain: "jsi36-a45bc.firebaseapp.com",
+    projectId: "jsi36-a45bc",
+    storageBucket: "jsi36-a45bc.firebasestorage.app",
+    messagingSenderId: "346562660239",
+    appId: "1:346562660239:web:18be6a1d29bd8d600dedfa",
+  };
 
-      function handleLogin() {
-        const valueUser = document.querySelector(".username").value;
-        const valuePass = document.querySelector(".password").value;
-        console.log(valueUser);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-        for (let i = 0; i < dataLocalUser.length; i++) {
-          if (
-            valueUser == dataLocalUser[i].username &&
-            valuePass == dataLocalUser[i].password
-          ) {
-            window.location.href = "index.html";
-          }
-          //   console.log(dataLocalUser[i].username);
-          //   console.log(dataLocalUser[i].password);
-        }
-      }
+  const registerForm = document.getElementById("registerForm");
+  const errorMessage = document.getElementById("errorMessage");
 
-      valueBtn.addEventListener("click", handleLogin);
-    </script> -->
+  registerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorMessage.textContent = "";
 
-    <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-      import {
-        getAuth,
-        createUserWithEmailAndPassword,
-      } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-      // TODO: Add SDKs for Firebase products that you want to use
-      // https://firebase.google.com/docs/web/setup#available-libraries
+    const fullName = document.getElementById("fullname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("conf_password").value;
 
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyBRsYiJX-i97pt7gmg0t0fRrJiKPYmtn_s",
-        authDomain: "jsi36-a45bc.firebaseapp.com",
-        projectId: "jsi36-a45bc",
-        storageBucket: "jsi36-a45bc.firebasestorage.app",
-        messagingSenderId: "346562660239",
-        appId: "1:346562660239:web:18be6a1d29bd8d600dedfa",
-      };
+    if (!fullName || !email || !password) {
+      errorMessage.textContent = "Vui lòng nhập đầy đủ thông tin!";
+      return;
+    }
 
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
+    if (password !== confirmPassword) {
+      errorMessage.textContent = "Mật khẩu xác nhận không khớp!";
+      return;
+    }
 
-      const getauth = getAuth(app);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      const btn_reg = document.querySelector(".btn_reg");
-      console.log(btn_reg);
-      function handleReg() {
-        const valueUser = document.querySelector("#username").value;
-        const valuePass = document.querySelector("#password").value;
-        createUserWithEmailAndPassword(getauth, valueUser, valuePass)
-          .then((item) => {
-            console.log(item);
-            window.location.href = "index.html";
-          })
-          .catch((err) => {
-            alert("Email đã tồn tại!")
-            console.log(err.message);
-          });
-      }
-      btn_reg.addEventListener("click", handleReg);
-    </script>
-    </div>
-  </body>
+      await updateProfile(user, {
+        displayName: fullName,
+      });
+
+      await setDoc(doc(db, "users", user.uid), {
+        fullName: fullName,
+        email: email,
+        createdAt: new Date().toISOString(),
+      });
+
+      alert("Đăng ký thành công!");
+      window.location.href = "login.html";
+
+    } catch (error) {
+      errorMessage.textContent = error.message;
+      console.error(error);
+    }
+  });
+</script>
+
+</body>
 </html>
